@@ -1,0 +1,19 @@
+{
+  "name": "aitoair-linux-cli-v2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "aitoair-cli.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "aitoair-cli": "./aitoair-cli.js"
+  },
+  "author": "rowellpica",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^8.3.0",
+    "inquirer": "^8.2.0",
+    "superagent": "^7.1.1"
+  }
+}
