@@ -5,6 +5,8 @@ const request = require('superagent');
 const path = require('path');
 const fs = require('fs');
 
+const LinuxDevice = require('./models/LinuxDevice');
+
 const packageVersion = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf-8')).version;
 
 program
@@ -25,11 +27,21 @@ const options = program.opts();
 const apiKeyArgv = options.apiKey;
 const widthArgv = options.width;
 const heightArgv = options.height;
+const dimensions = {
+  height: +heightArgv,
+  width: +widthArgv
+}
 
+console.debug(`[TinyBoom CLI] process.platform`, process.platform);
 console.debug(`[TinyBoom CLI] apiKeyArgv`, apiKeyArgv);
 console.debug(`[TinyBoom CLI] widthArgv`, widthArgv);
 console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
 
-(async () => {
+const linuxDevice = new LinuxDevice();
 
+(async () => {
+  const deviceId = await linuxDevice.getDeviceId();
+  console.debug(`[TinyBoom CLI] deviceId`, deviceId);
+  const deviceType = await linuxDevice.getDeviceType();
+  console.debug(`[TinyBoom CLI] deviceType`, deviceType);
 })();
