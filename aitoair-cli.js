@@ -7,6 +7,7 @@ const fs = require('fs');
 
 const LinuxDevice = require('./models/LinuxDevice');
 const RestApi = require('./library/rest-api');
+const imagesnap = require('./library/imagesnap');
 
 const packageVersion = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf-8')).version;
 
@@ -57,21 +58,22 @@ console.debug(`[TinyBoom CLI] widthArgv`, widthArgv);
 console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
 
 (async () => {
-  // if (!noCamera) {
-  //     if (isProphesee) {
-  //         camera = new prophesee_1.Prophesee(verboseArgv);
-  //     }
-  //     else if (process.platform === 'darwin') {
-  //         camera = new imagesnap_1.Imagesnap();
-  //     }
-  //     else if (process.platform === 'linux') {
-  //         camera = new gstreamer_1.GStreamer(verboseArgv);
-  //     }
-  //     else {
-  //         throw new Error('Unsupported platform: "' + process.platform + '"');
-  //     }
-  //     await camera.init();
-  // }
+  if (!noCamera) {
+      // if (isProphesee) {
+      //     camera = new prophesee_1.Prophesee(verboseArgv);
+      // }
+      // else 
+      if (process.platform === 'darwin') {
+          camera = new imagesnap.Imagesnap();
+      }
+      // else if (process.platform === 'linux') {
+      //     camera = new gstreamer_1.GStreamer(verboseArgv);
+      // }
+      else {
+          throw new Error('Unsupported platform: "' + process.platform + '"');
+      }
+      await camera.init();
+  }
   
   const linuxDevice = new LinuxDevice(null, {}, {});
 
