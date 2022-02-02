@@ -3,6 +3,8 @@ const asyncMutex = require("async-mutex");
 
 const get_ips_1 = require("../library/get-ips");
 
+const SERIAL_PREFIX = '\x1b[33m[SER]\x1b[0m';
+
 class LinuxDevice extends tsee.EventEmitter {
   constructor(cameraInstance, config, devKeys) {
       super();

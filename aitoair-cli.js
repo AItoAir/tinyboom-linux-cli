@@ -6,13 +6,15 @@ const path = require('path');
 const fs = require('fs');
 
 const LinuxDevice = require('./models/LinuxDevice');
+const RestApi = require('./library/rest-api');
 
 const packageVersion = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf-8')).version;
 
 program
   .description('TinyBoom Linux client ' + packageVersion)
   .version(packageVersion)
-  .option('--api-key <key>', 'API key to authenticate with TinyBoom (overrides current credentials)')
+  .option('--project <key>', 'Project Code of the project you want to access')
+  .option('--api-key <key>', 'API key to authenticate with TinyBoom')
   // .option('--disable-camera', `Don't prompt for camera`)
   // .option('--disable-microphone', `Don't prompt for microphone`)
   .option('--width <px>', 'Desired width of the camera stream', '416')
@@ -24,6 +26,7 @@ program
   .parse(process.argv);
 
 const options = program.opts();
+const projectCodeArgv = options.project;
 const apiKeyArgv = options.apiKey;
 const widthArgv = options.width;
 const heightArgv = options.height;
@@ -31,15 +34,55 @@ const dimensions = {
   height: +heightArgv,
   width: +widthArgv
 }
+const cliOptions = {
+  appName: 'TinyBoom Linux client',
+  apiKeyArgv: apiKeyArgv,
+  // cleanArgv: cleanArgv,
+  // devArgv: devArgv,
+  // hmacKeyArgv: hmacKeyArgv,
+  // silentArgv: silentArgv,
+  // connectProjectMsg: 'To which project do you want to connect this device?',
+  // getProjectFromConfig: async () => {
+  //     let projectId = await configFactory.getLinuxProjectId();
+  //     if (!projectId) {
+  //         return undefined;
+  //     }
+  //     return { projectId: projectId };
+  // }
+};
+const noCamera = false;
+const isProphesee = false;
+let camera;
+let configFactory;
 
-console.debug(`[TinyBoom CLI] process.platform`, process.platform);
+console.debug(`[TinyBoom CLI] packageVersion`, packageVersion);
+console.debug(`[TinyBoom CLI] platform`, process.platform);
+console.debug(`[TinyBoom CLI] projectCodeArgv`, projectCodeArgv);
 console.debug(`[TinyBoom CLI] apiKeyArgv`, apiKeyArgv);
 console.debug(`[TinyBoom CLI] widthArgv`, widthArgv);
 console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
 
-const linuxDevice = new LinuxDevice();
-
 (async () => {
+  const project = await RestApi.getProjectInfo(projectCodeArgv, apiKeyArgv);
+  console.debug(`[TinyBoom CLI] project`, project.name);
+  // if (!noCamera) {
+  //     if (isProphesee) {
+  //         camera = new prophesee_1.Prophesee(verboseArgv);
+  //     }
+  //     else if (process.platform === 'darwin') {
+  //         camera = new imagesnap_1.Imagesnap();
+  //     }
+  //     else if (process.platform === 'linux') {
+  //         camera = new gstreamer_1.GStreamer(verboseArgv);
+  //     }
+  //     else {
+  //         throw new Error('Unsupported platform: "' + process.platform + '"');
+  //     }
+  //     await camera.init();
+  // }
+  
+  const linuxDevice = new LinuxDevice(null, {}, {});
+
   const deviceId = await linuxDevice.getDeviceId();
   console.debug(`[TinyBoom CLI] deviceId`, deviceId);
   const deviceType = await linuxDevice.getDeviceType();
