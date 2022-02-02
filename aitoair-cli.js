@@ -34,22 +34,16 @@ const dimensions = {
   height: +heightArgv,
   width: +widthArgv
 }
-const cliOptions = {
-  appName: 'TinyBoom Linux client',
-  apiKeyArgv: apiKeyArgv,
-  // cleanArgv: cleanArgv,
-  // devArgv: devArgv,
-  // hmacKeyArgv: hmacKeyArgv,
-  // silentArgv: silentArgv,
-  // connectProjectMsg: 'To which project do you want to connect this device?',
-  // getProjectFromConfig: async () => {
-  //     let projectId = await configFactory.getLinuxProjectId();
-  //     if (!projectId) {
-  //         return undefined;
-  //     }
-  //     return { projectId: projectId };
-  // }
-};
+
+if (!projectCodeArgv) {
+  console.error(`--project must be specified`);
+  process.exit(1);
+}
+if (!apiKeyArgv) {
+  console.error(`--api-key must be specified`);
+  process.exit(1);
+}
+
 const noCamera = false;
 const isProphesee = false;
 let camera;
