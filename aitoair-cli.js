@@ -36,11 +36,11 @@ const dimensions = {
 }
 
 if (!projectCodeArgv) {
-  console.error(`--project must be specified`);
+  console.error(`Error: --project must be specified`);
   process.exit(1);
 }
 if (!apiKeyArgv) {
-  console.error(`--api-key must be specified`);
+  console.error(`Error: --api-key must be specified`);
   process.exit(1);
 }
 
@@ -57,8 +57,6 @@ console.debug(`[TinyBoom CLI] widthArgv`, widthArgv);
 console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
 
 (async () => {
-  const project = await RestApi.getProjectInfo(projectCodeArgv, apiKeyArgv);
-  console.debug(`[TinyBoom CLI] project`, project.name);
   // if (!noCamera) {
   //     if (isProphesee) {
   //         camera = new prophesee_1.Prophesee(verboseArgv);
@@ -81,4 +79,11 @@ console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
   console.debug(`[TinyBoom CLI] deviceId`, deviceId);
   const deviceType = await linuxDevice.getDeviceType();
   console.debug(`[TinyBoom CLI] deviceType`, deviceType);
+
+  const project = await RestApi.getProjectInfo(projectCodeArgv, apiKeyArgv, deviceId, deviceType);
+  if (!project) {
+    console.error('Error: Invalid Project');
+    process.exit(1);
+  }
+  console.debug(`[TinyBoom CLI] project`, project.name);
 })();
