@@ -22,7 +22,7 @@ program
   .option('--height <px>', 'Desired height of the camera stream', '416')
   // .option('--clean', 'Clear credentials')
   // .option('--silent', `Run in silent mode, don't prompt for credentials`)
-  // .option('--dev', 'List development servers, alternatively you can use the EI_HOST environmental variable to specify the Edge Impulse instance.')
+  // .option('--dev', 'List development servers.')
   .allowUnknownOption(true)
   .parse(process.argv);
 

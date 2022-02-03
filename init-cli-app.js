@@ -43,10 +43,10 @@ async function initCliApp(opts) {
     catch (ex2) {
         let ex = ex2;
         if (ex.statusCode) {
-            console.error('Failed to authenticate with Edge Impulse', ex.statusCode, ex.response.body);
+            console.error('Failed to authenticate', ex.statusCode, ex.response.body);
         }
         else {
-            console.error('Failed to authenticate with Edge Impulse', ex.message || ex.toString());
+            console.error('Failed to authenticate', ex.message || ex.toString());
         }
         process.exit(1);
     }
@@ -113,7 +113,7 @@ async function setupCliApp(configFactory, config, opts, deviceId) {
             let dk = (await config.api.projects.listDevkeys(projectId)).body;
             if (!dk.apiKey) {
                 throw new Error('No API key set (via --api-key), and no development API keys configured for ' +
-                    'this project. Add a development API key from the Edge Impulse dashboard to continue.');
+                    'this project. Add a development API key from the TinyBoom dashboard to continue.');
             }
             devKeys.apiKey = dk.apiKey;
             if (!opts.hmacKeyArgv && dk.hmacKey) {

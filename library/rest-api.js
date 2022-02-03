@@ -17,7 +17,7 @@ async function getProjectInfo(projectCode, apiKey, deviceId, deviceType) {
       return result.body.projectRecord
     }
   } catch (e) {
-   console.debug(e); 
+    // console.debug(e);
   }
   return null;
 }

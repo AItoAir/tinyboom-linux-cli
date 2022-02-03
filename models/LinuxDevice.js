@@ -4,6 +4,7 @@ const asyncMutex = require("async-mutex");
 const get_ips_1 = require("../library/get-ips");
 
 const SERIAL_PREFIX = '\x1b[33m[SER]\x1b[0m';
+const noMicrophone = true;
 
 class LinuxDevice extends tsee.EventEmitter {
   constructor(cameraInstance, config, devKeys) {
@@ -53,7 +54,7 @@ class LinuxDevice extends tsee.EventEmitter {
       if (id.startsWith('00:04:4b') || id.startsWith('48:b0:2d')) {
           return 'NVIDIA_JETSON_NANO';
       }
-      return 'EDGE_IMPULSE_LINUX';
+      return 'UNKNOWN_LINUX';
   }
   getSensors() {
       let sensors = [];

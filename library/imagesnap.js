@@ -53,7 +53,7 @@ class Imagesnap extends tsee_1.EventEmitter {
             throw new Error('Capture was already started');
         }
         this._lastOptions = options;
-        this._tempDir = await fs_1.default.promises.mkdtemp(path_1.default.join(os_1.default.tmpdir(), 'edge-impulse-cli'));
+        this._tempDir = await fs_1.default.promises.mkdtemp(path_1.default.join(os_1.default.tmpdir(), 'tinyboom-cli'));
         const devices = await this.listDevices();
         if (!devices.find(d => d === options.device)) {
             throw new Error('Invalid device ' + options.device);
