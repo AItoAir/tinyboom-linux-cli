@@ -7,11 +7,12 @@ const fs = require('fs');
 
 const LinuxDevice = require('./models/LinuxDevice');
 const RestApi = require('./library/rest-api');
+const SocketService = require('./library/socket-service');
 const imagesnap = require('./library/imagesnap');
 
 const packageVersion = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf-8')).version;
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
-const SERIAL_PREFIX = '\x1b[33m[SER]\x1b[0m';
+const WEBSOCKET_SEND_INTERVAL = 100;
 
 program
   .description('TinyBoom Linux client ' + packageVersion)
@@ -76,25 +77,27 @@ console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
     await camera.init();
   }
   
-  const linuxDevice = new LinuxDevice(camera, {}, {});
+  const linuxDevice = new LinuxDevice(camera, 500);
   let firstExit = true;
   const onSignal = async () => {
     if (!firstExit) {
       process.exit(1);
     } else {
-      console.log(SERIAL_PREFIX, 'Received stop signal, stopping application... ' +
+      console.log('Received stop signal, stopping application... ' +
       'Press CTRL+C again to force quit.');
       firstExit = false;
       try {
         if (camera) {
           await camera.stop();
         }
+        SocketService.disconnect();
         process.exit(0);
       }
       catch (ex2) {
         let ex = ex2;
-        console.log(SERIAL_PREFIX, 'Failed to stop inferencing', ex.message);
+        console.log('Failed to stop inferencing', ex.message);
       }
+      SocketService.disconnect();
       process.exit(1);
     }
   };
@@ -105,14 +108,10 @@ console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
   const deviceType = await linuxDevice.getDeviceType();
   console.debug(`[TinyBoom CLI] deviceType`, deviceType);
 
-  linuxDevice.on('snapshot', (buffer, filename) => {
+  linuxDevice.on('snapshot', async (buffer, filename) => {
     if (linuxDevice.isSnapshotStreaming()) {
-      let res = {
-        snapshotFrame: buffer.toString('base64'),
-        fileName: filename,
-      };
-      const base64ImageFrame = JSON.stringify(res);
-      // send socket message
+      const snapshotFrame = buffer.toString('base64');
+      await SocketService.sendMessage(project.id, apiKeyArgv, snapshotFrame);
     }
   });
   
@@ -139,25 +138,25 @@ console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
       }]);
       cameraDevice = inqRes.camera;
     }
-    console.log(SERIAL_PREFIX, 'Using camera', cameraDevice, 'starting...');
+    console.log('Using camera', cameraDevice, 'starting...');
     if (isProphesee) {
       await camera.start({
         device: cameraDevice,
-        intervalMs: 2000,
+        intervalMs: WEBSOCKET_SEND_INTERVAL,
         dimensions: dimensions
       });
     } else {
       await camera.start({
         device: cameraDevice,
-        intervalMs: 2000,
+        intervalMs: WEBSOCKET_SEND_INTERVAL,
         dimensions: dimensions
       });
     }
     camera.on('error', error => {
       console.log('camera error', error);
     });
-    console.log(SERIAL_PREFIX, 'Connected to camera');
-    await snooze(5000);
+    console.log('Connected to camera');
+    await snooze(2000);
     await linuxDevice.startSnapshotStreaming();
   }
 })();
