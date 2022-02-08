@@ -10,6 +10,8 @@ const RestApi = require('./library/rest-api');
 const imagesnap = require('./library/imagesnap');
 
 const packageVersion = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf-8')).version;
+const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
+const SERIAL_PREFIX = '\x1b[33m[SER]\x1b[0m';
 
 program
   .description('TinyBoom Linux client ' + packageVersion)
@@ -48,7 +50,6 @@ if (!apiKeyArgv) {
 const noCamera = false;
 const isProphesee = false;
 let camera;
-let configFactory;
 
 console.debug(`[TinyBoom CLI] packageVersion`, packageVersion);
 console.debug(`[TinyBoom CLI] platform`, process.platform);
@@ -59,33 +60,104 @@ console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
 
 (async () => {
   if (!noCamera) {
-      // if (isProphesee) {
-      //     camera = new prophesee_1.Prophesee(verboseArgv);
-      // }
-      // else 
-      if (process.platform === 'darwin') {
-          camera = new imagesnap.Imagesnap();
-      }
-      // else if (process.platform === 'linux') {
-      //     camera = new gstreamer_1.GStreamer(verboseArgv);
-      // }
-      else {
-          throw new Error('Unsupported platform: "' + process.platform + '"');
-      }
-      await camera.init();
+    // if (isProphesee) {
+    //     camera = new prophesee_1.Prophesee(verboseArgv);
+    // }
+    // else 
+    if (process.platform === 'darwin') {
+      camera = new imagesnap.Imagesnap();
+    }
+    // else if (process.platform === 'linux') {
+    //     camera = new gstreamer_1.GStreamer(verboseArgv);
+    // }
+    else {
+      throw new Error('Unsupported platform: "' + process.platform + '"');
+    }
+    await camera.init();
   }
   
-  const linuxDevice = new LinuxDevice(null, {}, {});
-
+  const linuxDevice = new LinuxDevice(camera, {}, {});
+  let firstExit = true;
+  const onSignal = async () => {
+    if (!firstExit) {
+      process.exit(1);
+    } else {
+      console.log(SERIAL_PREFIX, 'Received stop signal, stopping application... ' +
+      'Press CTRL+C again to force quit.');
+      firstExit = false;
+      try {
+        if (camera) {
+          await camera.stop();
+        }
+        process.exit(0);
+      }
+      catch (ex2) {
+        let ex = ex2;
+        console.log(SERIAL_PREFIX, 'Failed to stop inferencing', ex.message);
+      }
+      process.exit(1);
+    }
+  };
+  process.on('SIGHUP', onSignal);
+  process.on('SIGINT', onSignal);
   const deviceId = await linuxDevice.getDeviceId();
   console.debug(`[TinyBoom CLI] deviceId`, deviceId);
   const deviceType = await linuxDevice.getDeviceType();
   console.debug(`[TinyBoom CLI] deviceType`, deviceType);
 
+  linuxDevice.on('snapshot', (buffer, filename) => {
+    if (linuxDevice.isSnapshotStreaming()) {
+      let res = {
+        snapshotFrame: buffer.toString('base64'),
+        fileName: filename,
+      };
+      const base64ImageFrame = JSON.stringify(res);
+      // send socket message
+    }
+  });
+  
   const project = await RestApi.getProjectInfo(projectCodeArgv, apiKeyArgv, deviceId, deviceType);
   if (!project) {
     console.error('Error: Invalid Project');
     process.exit(1);
   }
   console.debug(`[TinyBoom CLI] project`, project.name);
+  if (camera) {
+    let cameraDevice;
+    const cameraDevices = await camera.listDevices();
+    if (cameraDevices.length === 0) {
+      throw new Error('Cannot find any webcams, run this command with --disable-camera to skip selection');
+    } else if (cameraDevices.length === 1) {
+      cameraDevice = cameraDevices[0];
+    } else {
+      let inqRes = await inquirer.prompt([{
+        type: 'list',
+        choices: (cameraDevices || []).map(p => ({ name: p, value: p })),
+        name: 'camera',
+        message: 'Select a camera (or run this command with --disable-camera to skip selection)',
+        pageSize: 20
+      }]);
+      cameraDevice = inqRes.camera;
+    }
+    console.log(SERIAL_PREFIX, 'Using camera', cameraDevice, 'starting...');
+    if (isProphesee) {
+      await camera.start({
+        device: cameraDevice,
+        intervalMs: 2000,
+        dimensions: dimensions
+      });
+    } else {
+      await camera.start({
+        device: cameraDevice,
+        intervalMs: 2000,
+        dimensions: dimensions
+      });
+    }
+    camera.on('error', error => {
+      console.log('camera error', error);
+    });
+    console.log(SERIAL_PREFIX, 'Connected to camera');
+    await snooze(5000);
+    await linuxDevice.startSnapshotStreaming();
+  }
 })();

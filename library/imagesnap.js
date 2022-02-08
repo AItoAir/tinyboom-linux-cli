@@ -54,6 +54,7 @@ class Imagesnap extends tsee_1.EventEmitter {
         }
         this._lastOptions = options;
         this._tempDir = await fs_1.default.promises.mkdtemp(path_1.default.join(os_1.default.tmpdir(), 'tinyboom-cli'));
+        console.log('LinuxDevice._tempDir', this._tempDir);
         const devices = await this.listDevices();
         if (!devices.find(d => d === options.device)) {
             throw new Error('Invalid device ' + options.device);
