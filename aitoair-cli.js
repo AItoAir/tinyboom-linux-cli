@@ -89,6 +89,7 @@ console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
       try {
         if (camera) {
           await camera.stop();
+          await camera.removeTemporaryFiles();
         }
         SocketService.disconnect();
         process.exit(0);

@@ -54,6 +54,7 @@ class Imagesnap extends tsee_1.EventEmitter {
         }
         this._lastOptions = options;
         this._tempDir = await fs_1.default.promises.mkdtemp(path_1.default.join(os_1.default.tmpdir(), 'tinyboom-cli'));
+        console.log(`Temporary files stored in ${this._tempDir}`);
         const devices = await this.listDevices();
         if (!devices.find(d => d === options.device)) {
             throw new Error('Invalid device ' + options.device);
@@ -117,14 +118,28 @@ class Imagesnap extends tsee_1.EventEmitter {
                         this._captureProcess.kill('SIGHUP');
                     }
                 }, 500);
-            }
-            else {
+            } else {
                 resolve();
             }
         });
     }
     getLastOptions() {
         return this._lastOptions;
+    }
+    async removeTemporaryFiles() {
+        const tempFiles = await fs_1.default.promises.readdir(this._tempDir);
+        let deleteCount = 0;
+        for (let i = 0; i < tempFiles.length; i++) {
+            const tempFile = tempFiles[i];
+            const tempFullpath = path_1.default.join(this._tempDir, tempFile);
+            try {
+                await fs_1.default.promises.unlink(tempFullpath);
+                deleteCount++;
+            } catch (e) {
+                console.error(`Failed to delete tempFile=${tempFile}`);
+            }
+        }
+        console.log(`Deleted ${deleteCount} temporary file(s)`);
     }
 }
 exports.Imagesnap = Imagesnap;
