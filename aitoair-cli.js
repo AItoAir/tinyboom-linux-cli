@@ -110,8 +110,13 @@ console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
 
   linuxDevice.on('snapshot', async (buffer, filename) => {
     if (linuxDevice.isSnapshotStreaming()) {
-      const snapshotFrame = buffer.toString('base64');
-      await SocketService.sendMessage(project.id, apiKeyArgv, snapshotFrame);
+      const frame = buffer.toString('base64');
+      const data = {
+        frame,
+        filename
+      };
+      const message = JSON.stringify(data);
+      await SocketService.sendMessage(project.id, apiKeyArgv, deviceId, message);
     }
   });
   
