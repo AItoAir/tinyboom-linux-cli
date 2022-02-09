@@ -12,7 +12,7 @@ const imagesnap = require('./library/imagesnap');
 
 const packageVersion = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf-8')).version;
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
-const WEBSOCKET_SEND_INTERVAL = 100;
+const WEBSOCKET_SEND_INTERVAL = 200;
 
 program
   .description('TinyBoom Linux client ' + packageVersion)
@@ -77,7 +77,7 @@ console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
     await camera.init();
   }
   
-  const linuxDevice = new LinuxDevice(camera, 500);
+  const linuxDevice = new LinuxDevice(camera, dimensions.height);
   let firstExit = true;
   const onSignal = async () => {
     if (!firstExit) {
