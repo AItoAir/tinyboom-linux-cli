@@ -19,7 +19,12 @@ function disconnect() {
   io.socket.disconnect();
 }
 
+function on(eventName, fn) {
+  io.socket.on(eventName, fn);
+}
+
 module.exports = {
   sendMessage,
-  disconnect
+  disconnect,
+  on
 }

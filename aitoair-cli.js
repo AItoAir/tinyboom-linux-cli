@@ -120,6 +120,9 @@ console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
       await SocketService.sendMessage(project.id, apiKeyArgv, deviceId, message);
     }
   });
+  SocketService.on(`capture-${deviceId}`, (data) => {
+    console.log(`capture-${deviceId}`, data);
+  });
   
   const project = await RestApi.getProjectInfo(projectCodeArgv, apiKeyArgv, deviceId, deviceType);
   if (!project) {
