@@ -1,20 +1,23 @@
 const request = require('superagent');
-const apiHost = "localhost:1337";
-const baseApiUrl = `http://${apiHost}/api/v1/cli`;
+const apiHost = process.env.TINYBOOM_APIHOST || 'http://localhost:1337';
+const baseApiUrl = `${apiHost}/api/v1/cli`;
 
 async function getProjectInfo(projectCode, apiKey, deviceId, deviceType) {
   const url = `${baseApiUrl}/project/${projectCode}`;
-    try {
+  try {
     const result = await request
-      .post(url)
-      .send({ 
-        deviceId,
-        deviceType
-      })
-      .set('X-API-Key', apiKey)
-      .set('content-type', 'application/json');
+    .post(url)
+    .send({ 
+      deviceId,
+      deviceType
+    })
+    .set('X-API-Key', apiKey)
+    .set('content-type', 'application/json');
     if (result && result.body) {
-      return result.body.projectRecord
+      return {
+        project: result.body.projectRecord,
+        device: result.body.deviceRecord
+      }
     }
   } catch (e) {
     // console.debug(e);
@@ -22,6 +25,30 @@ async function getProjectInfo(projectCode, apiKey, deviceId, deviceType) {
   return null;
 }
 
+async function uploadImage(projectCode, apiKey, deviceRecordId, userId, teamId, snapshotFullPath, type) {
+  console.log(`RestApi.uploadImage`, projectCode, apiKey, deviceRecordId, userId, teamId, snapshotFullPath, type);
+  const url = `${baseApiUrl}/project/${projectCode}/upload-image`;
+  try {
+    const result = await request
+    .post(url)
+    .set('X-API-Key', apiKey)
+    .field('deviceRecordId', deviceRecordId)
+    .field('userId', userId)
+    .field('teamId', teamId)
+    .field('type', type)
+    .attach('imageFile', snapshotFullPath);
+    if (result && result.body) {
+      return {
+        image: result.body.image
+      }
+    }
+  } catch (e) {
+    console.debug(e);
+  }
+  return null;
+}
+
 module.exports = {
-  getProjectInfo
+  getProjectInfo,
+  uploadImage
 }

@@ -126,6 +126,9 @@ class Imagesnap extends tsee_1.EventEmitter {
   getLastOptions() {
     return this._lastOptions;
   }
+  getSnapshotPath(filename) {
+    return path_1.default.join(this._tempDir, filename);
+  }
   async removeTemporaryFiles() {
     const tempFiles = await fs_1.default.promises.readdir(this._tempDir);
     let deleteCount = 0;

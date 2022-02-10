@@ -51,6 +51,7 @@ if (!apiKeyArgv) {
 const noCamera = false;
 const isProphesee = false;
 let camera;
+let device;
 
 console.debug(`[TinyBoom CLI] packageVersion`, packageVersion);
 console.debug(`[TinyBoom CLI] platform`, process.platform);
@@ -120,13 +121,26 @@ console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
       await SocketService.sendMessage(project.id, apiKeyArgv, deviceId, message);
     }
   });
-  SocketService.on(`capture-${deviceId}`, (data) => {
-    console.log(`capture-${deviceId}`, data);
+  SocketService.on(`capture-${deviceId}`, async (data) => {
+    const { action, filename, type, userId, teamId } = data;
+    if (action === 'capture-edgedevice-image') {
+      const snapshotFullPath = camera.getSnapshotPath(filename);
+      const { image } = await RestApi.uploadImage(projectCodeArgv, apiKeyArgv, device.id, userId, teamId, snapshotFullPath, type);
+      console.log(`SocketService.on('capture-${deviceId}') action=${action} uploaded image=${image}`);
+    } else {
+      console.log(`SocketService.on('capture-${deviceId}') action=${action} ignored`);
+    }
   });
   
-  const project = await RestApi.getProjectInfo(projectCodeArgv, apiKeyArgv, deviceId, deviceType);
+  const info = await RestApi.getProjectInfo(projectCodeArgv, apiKeyArgv, deviceId, deviceType);
+  const project = info.project;
   if (!project) {
     console.error('Error: Invalid Project');
+    process.exit(1);
+  }
+  device = info.device;
+  if (!device) {
+    console.error('Error: Invalid Device');
     process.exit(1);
   }
   console.debug(`[TinyBoom CLI] project`, project.name);
