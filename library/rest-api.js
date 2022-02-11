@@ -48,7 +48,22 @@ async function uploadImage(projectCode, apiKey, deviceRecordId, userId, teamId, 
   return null;
 }
 
+async function setDeviceInactive(projectCode, apiKey, deviceRecordId) {
+  const url = `${baseApiUrl}/project/${projectCode}/inactive`;
+  try {
+    await request.post(url)
+    .send({ deviceRecordId })
+    .set('X-API-Key', apiKey)
+    .set('content-type', 'application/json');
+    return true;
+  } catch (e) {
+    // console.debug(e);
+  }
+  return false;
+}
+
 module.exports = {
   getProjectInfo,
-  uploadImage
+  uploadImage,
+  setDeviceInactive
 }

@@ -92,12 +92,17 @@ console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
           await camera.stop();
           await camera.removeTemporaryFiles();
         }
+        if (device) {
+          await RestApi.setDeviceInactive(projectCodeArgv, apiKeyArgv, device.id);
+        }
         SocketService.disconnect();
         process.exit(0);
-      }
-      catch (ex2) {
+      } catch (ex2) {
         let ex = ex2;
         console.log('Failed to stop inferencing', ex.message);
+      }
+      if (device) {
+        await RestApi.setDeviceInactive(projectCodeArgv, apiKeyArgv, device.id);
       }
       SocketService.disconnect();
       process.exit(1);
@@ -123,7 +128,7 @@ console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
   });
   SocketService.on(`capture-${deviceId}`, async (data) => {
     const { action, filename, type, userId, teamId } = data;
-    if (action === 'capture-edgedevice-image') {
+    if (device && action === 'capture-edgedevice-image') {
       const snapshotFullPath = camera.getSnapshotPath(filename);
       const { image } = await RestApi.uploadImage(projectCodeArgv, apiKeyArgv, device.id, userId, teamId, snapshotFullPath, type);
       console.log(`SocketService.on('capture-${deviceId}') action=${action} uploaded image=${image}`);
