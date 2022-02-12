@@ -9,6 +9,7 @@ const LinuxDevice = require('./models/LinuxDevice');
 const RestApi = require('./library/rest-api');
 const SocketService = require('./library/socket-service');
 const imagesnap = require('./library/imagesnap');
+const gstreamer = require('./library/gstreamer');
 
 const packageVersion = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf-8')).version;
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -68,10 +69,9 @@ console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
     // else 
     if (process.platform === 'darwin') {
       camera = new imagesnap.Imagesnap();
+    } else if (process.platform === 'linux') {
+      camera = new gstreamer.GStreamer(verboseArgv);
     }
-    // else if (process.platform === 'linux') {
-    //     camera = new gstreamer_1.GStreamer(verboseArgv);
-    // }
     else {
       throw new Error('Unsupported platform: "' + process.platform + '"');
     }
