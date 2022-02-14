@@ -56,9 +56,9 @@ class GStreamer extends tsee_1.EventEmitter {
     let dimensions = options.dimensions || { width: 640, height: 480 };
     // if we have /dev/shm, use that (RAM backed, instead of SD card backed, better for wear)
     let osTmpDir = os_1.default.tmpdir();
-    if (await this.exists('/dev/shm')) {
-      osTmpDir = '/dev/shm';
-    }
+    // if (await this.exists('/dev/shm')) {
+    //   osTmpDir = '/dev/shm';
+    // }
     this._tempDir = await fs_1.default.promises.mkdtemp(path_1.default.join(osTmpDir, 'tinyboom-cli'));
     const device = (await this.getAllDevices()).find(d => d.name === options.device);
     if (!device) {
@@ -168,6 +168,7 @@ class GStreamer extends tsee_1.EventEmitter {
         this._handledFiles[fileName] = true;
         if (await this.exists(path_1.default.join(this._tempDir, fileName))) {
           await fs_1.default.promises.unlink(path_1.default.join(this._tempDir, fileName));
+          console.log(`1 filename ${fileName} deleted`);
         }
         return;
       }
@@ -194,6 +195,7 @@ class GStreamer extends tsee_1.EventEmitter {
         }
         if (await this.exists(path_1.default.join(this._tempDir, fileName))) {
           await fs_1.default.promises.unlink(path_1.default.join(this._tempDir, fileName));
+          console.log(`2 filename ${fileName} deleted`);
         }
       } finally {
         this._processing = false;
@@ -469,7 +471,7 @@ class GStreamer extends tsee_1.EventEmitter {
         console.error(`Failed to delete tempFile=${tempFile}`);
       }
     }
-    console.log(`Deleted ${deleteCount} temporary file(s)`);
+    console.log(`Deleted ${deleteCount} temporary file(s) in ${this._tempDir}`);
   }
 }
 exports.GStreamer = GStreamer;
