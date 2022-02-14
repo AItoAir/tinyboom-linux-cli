@@ -51,7 +51,7 @@ if (!apiKeyArgv) {
 
 const noCamera = false;
 const isProphesee = false;
-const verboseMode = true;
+const verboseMode = false;
 let camera;
 let device;
 
