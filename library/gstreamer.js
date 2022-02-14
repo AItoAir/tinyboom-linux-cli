@@ -1,4 +1,5 @@
 "use strict";
+const DELETE_LATER = true;
 var __importDefault = (this && this.__importDefault) || function (mod) {
   return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -164,11 +165,11 @@ class GStreamer extends tsee_1.EventEmitter {
         return;
       }
       // not next frame yet?
-      if (Date.now() < nextFrame) {
+      if (!DELETE_LATER && Date.now() < nextFrame) {
         this._handledFiles[fileName] = true;
         if (await this.exists(path_1.default.join(this._tempDir, fileName))) {
           await fs_1.default.promises.unlink(path_1.default.join(this._tempDir, fileName));
-          console.log(`1 filename ${fileName} deleted`);
+          console.log(`[1] filename ${fileName} deleted`);
         }
         return;
       }
@@ -193,9 +194,9 @@ class GStreamer extends tsee_1.EventEmitter {
         } catch (ex) {
           console.error('Failed to load file', path_1.default.join(this._tempDir, fileName), ex);
         }
-        if (await this.exists(path_1.default.join(this._tempDir, fileName))) {
+        if (!DELETE_LATER && await this.exists(path_1.default.join(this._tempDir, fileName))) {
           await fs_1.default.promises.unlink(path_1.default.join(this._tempDir, fileName));
-          console.log(`2 filename ${fileName} deleted`);
+          console.log(`[2] filename ${fileName} deleted`);
         }
       } finally {
         this._processing = false;
