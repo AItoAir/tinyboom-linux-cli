@@ -51,6 +51,7 @@ if (!apiKeyArgv) {
 
 const noCamera = false;
 const isProphesee = false;
+const verboseMode = true;
 let camera;
 let device;
 
@@ -70,7 +71,7 @@ console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
     if (process.platform === 'darwin') {
       camera = new imagesnap.Imagesnap();
     } else if (process.platform === 'linux') {
-      camera = new gstreamer.GStreamer(verboseArgv);
+      camera = new gstreamer.GStreamer(verboseMode);
     }
     else {
       throw new Error('Unsupported platform: "' + process.platform + '"');
