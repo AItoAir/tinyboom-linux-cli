@@ -124,9 +124,11 @@ console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
         filename
       };
       const message = JSON.stringify(data);
-      await SocketService.sendMessage(project.id, apiKeyArgv, deviceId, message);
+      await SocketService.sendMessage(project.id, deviceId, message);
     }
   });
+  
+  SocketService.setup(apiKeyArgv);
   SocketService.on(`capture-${deviceId}`, async (data) => {
     const { action, filename, type, userId, teamId } = data;
     if (device && action === 'capture-edgedevice-image') {
