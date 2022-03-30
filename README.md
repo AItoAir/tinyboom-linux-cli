@@ -8,7 +8,7 @@ This library is based from [edge-impulse-linux-cli](https://github.com/edgeimpul
 Collecting data is one of the first step to training a machine learning model. If you want to collect data from your Linux edge device's camera, you can use our TinyBoom CLI application.
 
 ## Registration and Generating API Keys
-1. If you have not yet signed up for an account, go to [tinyboom.aitoair.com](tinyboom.aitoair.com/signup) to register for a new account.
+1. If you have not yet signed up for an account, go to [tinyboom.aitoair.com](https://tinyboom.aitoair.com/signup) to register for a new account.
 2. Select a project by clicking the `Detail` button or create a new project by clicking the `New Project` button.
 3. From the left sidepanel, click `API Keys and Devices`. This will load a page where you can see the list of edge devices and api keys related to the project.
 4. On the `API Keys` section, click the `Generate` button. This will generate and display a new `API Key` that you will use for connecting `TinyBoom CLI` app to the project.
@@ -16,7 +16,7 @@ Collecting data is one of the first step to training a machine learning model. I
 ## Setup and running TinyBoom CLI app
 You can clone the repository using this command
 ```
-$ git clone https://github.com/AItoAir/aitoair-linux-cli-v2.git
+$ git clone https://github.com/AItoAir/tinyboom-linux-cli.git
 ```
 
 Next, install the dependencies. (Tested using Node version 15.11.0 and npm version 7.6.0)
