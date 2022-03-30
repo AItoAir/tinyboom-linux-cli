@@ -43,4 +43,4 @@ $ node aitoair-cli --project P000000003 --api-key 38b9647b-f081-44a0-850a-3bb6b7
 4. You can now click either `Capture Train Image` or `Capture Test Image` buttons to use the captured image as training or testing image for your machine learning project.
 
 ## Have any question or suggestion?
-[Contact Us](https://aitoair.com/contact-us/) or send email to jeong@aitoair.com
+Feel free to [contact us](https://aitoair.com/contact-us/)
