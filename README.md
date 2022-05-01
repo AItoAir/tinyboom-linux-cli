@@ -1,4 +1,47 @@
 # TinyBoom Linux CLI
+
+* [日本語（Japanese）](#README(日本語))
+* [English](#README-in-English)
+-----
+
+## README(日本語)
+このCLIはLinux OSで動作するエッジデバイスのセンサーデータをTinyboomで収集するためのライブラリです。Node.jsで動作します。
+このライブラリを使うためには、Tinyboom上でデバイス通信用のAPIを発行する必要があります。
+Edgeimpulse社のLinux CLI（[edge-impulse-linux-cli](https://github.com/edgeimpulse/edge-impulse-linux-cli)）をもとに、Tinyboom CLIを作成しました。Edgeimpulse社に感謝申し上げます。
+## データ収集
+データを集めるのは、機械学習の第1ステップです。Linuxベースのエッジデバイスであれば、ホンCLIを使い、カメラセンサーからのデータ収集ができます。
+## APIキー登録および生成
+1. まだTinyboomにアカウント登録をお済でない方は、こちらのリンク（ [tinyboom.aitoair.com](https://tinyboom.aitoair.com/signup) ）でアカウント登録を行ってください。
+2. 既存のプロジェクトがあれば、Detailボタンを、プロジェクトが無ければ、新しいプロジェクトを生成してください。
+3. 左側の操作パンネルで`API Keys and Devices`を押すと、該当プロジェクトと関連しているエッジデバイスとAPIキーを確認することができます。
+4. `API Keys`セクションで、`Generate`ボタンを押すと、`API Key`を発行することができます。`TinyBoom CLI`に使うAPIキーとなるため、大切に扱いましょう。
+## Tinyboom CLIのセットアップ
+このレポジトリを下記のコマンドでダウンロードします。
+```
+$ git clone https://github.com/AItoAir/tinyboom-linux-cli.git
+```
+CLIを使用するための必要ライブラリnodeとnpmをダウンロードした後、下記のコマンドでTinyboom CLIをインストールします。(Node v15.11.0とnpm v7.6.0でテスト済み)
+```
+$ cd aitoair-linux-cli-v2/
+$ npm install
+```
+下記のコマンドでCLIを実行します。
+```
+$ node aitoair-cli --project PROJECT_CODE --api-key PROJECT_API_KEY
+```
+- `PROJECT_CODE`は自分のプロジェクト番号を記載してください。
+- `PROJECT_API_KEY`は[APIキー登録および生成](#APIキー登録および生成)で生成したAPIキーを記載してください。
+
+「サンプル」
+```
+$ node aitoair-cli --project P000000003 --api-key 38b9647b-f081-44a0-850a-3bb6b7056f2a
+```
+## カメラセンサーの観察
+1. プロジェクトに戻り、`Data Collection`の`Upload from edge device`ボタンを押すと、プロジェクトと通信しているエッジデバイスのセンサーから送られているデータを確認することができます。
+2. `Capture Train Image`や`Capture Test Image`ボタンで機械学習のためのデータを取得することができます。
+-----
+
+## README in English
 This library lets you collect sensor data on Linux machines using Node.js.
 This library interacts with our API with the use of API key available when you sign up and subscribe to our service.
 
