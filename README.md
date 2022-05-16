@@ -22,7 +22,7 @@ $ git clone https://github.com/AItoAir/tinyboom-linux-cli.git
 ```
 CLIを使用するための必要ライブラリnodeとnpmをダウンロードした後、下記のコマンドでTinyboom CLIをインストールします。(Node v15.11.0とnpm v7.6.0でテスト済み)
 ```
-$ cd aitoair-linux-cli-v2/
+$ cd tinyboom-linux-cli/
 $ npm install
 ```
 下記のコマンドでCLIを実行します。
@@ -64,7 +64,7 @@ $ git clone https://github.com/AItoAir/tinyboom-linux-cli.git
 
 Next, install the dependencies. (Tested using Node version 15.11.0 and npm version 7.6.0)
 ```
-$ cd aitoair-linux-cli-v2/
+$ cd tinyboom-linux-cli/
 $ npm install
 ```
 Launch the TinyBoom CLI app using this format
