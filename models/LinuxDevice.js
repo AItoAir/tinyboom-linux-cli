@@ -7,7 +7,7 @@ const get_ips_1 = require("../library/get-ips");
 const noMicrophone = true;
 
 class LinuxDevice extends tsee.EventEmitter {
-  constructor(cameraInstance, frameHeight = 300, frameWidth = 410) {
+  constructor(cameraInstance, frameHeight = 360, frameWidth = 640) {
     super();
     this._snapshotStreaming = false;
     this._lastSnapshot = new Date(0);
