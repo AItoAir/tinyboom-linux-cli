@@ -22,8 +22,8 @@ program
   .option('--api-key <key>', 'API key to authenticate with TinyBoom')
   // .option('--disable-camera', `Don't prompt for camera`)
   // .option('--disable-microphone', `Don't prompt for microphone`)
-  .option('--width <px>', 'Desired width of the camera stream', '416')
-  .option('--height <px>', 'Desired height of the camera stream', '416')
+  .option('--width <px>', 'Desired width of the camera stream', '410')
+  .option('--height <px>', 'Desired height of the camera stream', '300')
   // .option('--clean', 'Clear credentials')
   // .option('--silent', `Run in silent mode, don't prompt for credentials`)
   // .option('--dev', 'List development servers.')
@@ -79,7 +79,7 @@ console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
     await camera.init();
   }
   
-  const linuxDevice = new LinuxDevice(camera, dimensions.height);
+  const linuxDevice = new LinuxDevice(camera, dimensions.height, dimensions.width);
   let firstExit = true;
   const onSignal = async () => {
     if (!firstExit) {

@@ -7,7 +7,7 @@ const get_ips_1 = require("../library/get-ips");
 const noMicrophone = true;
 
 class LinuxDevice extends tsee.EventEmitter {
-  constructor(cameraInstance, frameHeight = 96) {
+  constructor(cameraInstance, frameHeight = 300, frameWidth = 410) {
     super();
     this._snapshotStreaming = false;
     this._lastSnapshot = new Date(0);
@@ -22,7 +22,7 @@ class LinuxDevice extends tsee.EventEmitter {
         try {
           if (this._snapshotStreaming && Date.now() - +this._lastSnapshot >= 100 && id === this._snapshotId) {
             const jpg = sharp(buffer);
-            const resized = await jpg.resize(undefined, frameHeight).jpeg().toBuffer();
+            const resized = await jpg.resize(frameWidth, frameHeight).jpeg().toBuffer();
             this.emit('snapshot', resized, filename);
             this._lastSnapshot = new Date();
           }
