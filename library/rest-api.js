@@ -1,5 +1,5 @@
 const request = require('superagent');
-const apiHost = process.env.TINYBOOM_APIHOST || 'http://localhost:1337';
+const apiHost = process.env.TINYBOOM_APIHOST || 'https://tinyboom.aitoair.com';
 const baseApiUrl = `${apiHost}/api/v1/cli`;
 
 async function getProjectInfo(projectCode, apiKey, deviceId, deviceType) {
