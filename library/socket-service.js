@@ -3,7 +3,7 @@ function setup(apiKey) {
   const socketIOClient = require('socket.io-client');
   const sailsIOClient = require('sails.io.js');
   io = sailsIOClient(socketIOClient);
-  io.sails.url = process.env.TINYBOOM_APIHOST || 'https://tinyboom.aitoair.com ';
+  io.sails.url = process.env.TINYBOOM_APIHOST || 'https://tinyboom.aitoair.com';
   io.sails.initialConnectionHeaders = { 'x-api-key': apiKey };
 }
 
