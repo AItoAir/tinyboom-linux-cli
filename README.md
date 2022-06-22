@@ -7,9 +7,9 @@
 ## README(日本語)
 このCLIはLinux OSで動作するエッジデバイスのセンサーデータをTinyboomで収集するためのライブラリです。Node.jsで動作します。
 このライブラリを使うためには、Tinyboom上でデバイス通信用のAPIを発行する必要があります。
-Edgeimpulse社のLinux CLI（[edge-impulse-linux-cli](https://github.com/edgeimpulse/edge-impulse-linux-cli)）をもとに、Tinyboom CLIを作成しました。Edgeimpulse社に感謝申し上げます。
+Edgeimpulse社のLinux CLI（[edge-impulse-linux-cli](https://github.com/edgeimpulse/edge-impulse-linux-cli)）をもとに、Tinyboom CLIを作成しました。この場を借りてEdgeimpulse社に感謝申し上げます。
 ## データ収集
-データを集めるのは、機械学習の第1ステップです。Linuxベースのエッジデバイスであれば、ホンCLIを使い、カメラセンサーからのデータ収集ができます。
+データを集めるのは、機械学習の第1ステップです。Linuxベースのエッジデバイスであれば、本CLIを使い、カメラセンサーからのデータ収集ができます。
 ## APIキー登録および生成
 1. まだTinyboomにアカウント登録をお済でない方は、こちらのリンク（ [tinyboom.aitoair.com](https://tinyboom.aitoair.com/signup) ）でアカウント登録を行ってください。
 2. 既存のプロジェクトがあれば、Detailボタンを、プロジェクトが無ければ、新しいプロジェクトを生成してください。
