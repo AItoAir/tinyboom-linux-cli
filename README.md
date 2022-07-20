@@ -27,14 +27,14 @@ $ npm install
 ```
 下記のコマンドでCLIを実行します。
 ```
-$ node aitoair-cli --project PROJECT_CODE --api-key PROJECT_API_KEY
+$ node tinyboom-cli --project PROJECT_CODE --api-key PROJECT_API_KEY
 ```
 - `PROJECT_CODE`は自分のプロジェクト番号を記載してください。
 - `PROJECT_API_KEY`は[APIキー登録および生成](#APIキー登録および生成)で生成したAPIキーを記載してください。
 
 「サンプル」
 ```
-$ node aitoair-cli --project P000000003 --api-key 38b9647b-f081-44a0-850a-3bb6b7056f2a
+$ node tinyboom-cli --project P000000003 --api-key 38b9647b-f081-44a0-850a-3bb6b7056f2a
 ```
 ## カメラセンサーの観察
 1. プロジェクトに戻り、`Data Collection`の`Upload from edge device`ボタンを押すと、プロジェクトと通信しているエッジデバイスのセンサーから送られているデータを確認することができます。
@@ -69,14 +69,14 @@ $ npm install
 ```
 Launch the TinyBoom CLI app using this format
 ```
-$ node aitoair-cli --project PROJECT_CODE --api-key PROJECT_API_KEY
+$ node tinyboom-cli --project PROJECT_CODE --api-key PROJECT_API_KEY
 ```
 - Replace `PROJECT_CODE` with the actual project code of your project
 - Replace `PROJECT_API_KEY` with the api key you generated earlier from the TinyBoom web application.
 
 Sample Usage
 ```
-$ node aitoair-cli --project P000000003 --api-key 38b9647b-f081-44a0-850a-3bb6b7056f2a
+$ node tinyboom-cli --project P000000003 --api-key 38b9647b-f081-44a0-850a-3bb6b7056f2a
 ```
 
 ## Viewing the camera feed from TinyBoom webapp
