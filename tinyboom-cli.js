@@ -16,14 +16,14 @@ const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 const WEBSOCKET_SEND_INTERVAL = 200;
 
 program
-  .description('TinyBoom Linux client ' + packageVersion)
+  .description('Tinyboom Linux client ' + packageVersion)
   .version(packageVersion)
-  .option('--project <key>', 'Project Code of the project you want to access')
-  .option('--api-key <key>', 'API key to authenticate with TinyBoom')
+  .option('-p, --project <key>', 'Project Code of the project you want to access')
+  .option('-a, --api-key <key>', 'API key to authenticate with Tinyboom')
   // .option('--disable-camera', `Don't prompt for camera`)
   // .option('--disable-microphone', `Don't prompt for microphone`)
-  .option('--width <px>', 'Desired width of the camera stream', '640')
-  .option('--height <px>', 'Desired height of the camera stream', '360')
+  .option('-w, --width <px>', 'Desired width of the camera stream', '640')
+  .option('-h, --height <px>', 'Desired height of the camera stream', '360')
   // .option('--clean', 'Clear credentials')
   // .option('--silent', `Run in silent mode, don't prompt for credentials`)
   // .option('--dev', 'List development servers.')
@@ -55,12 +55,12 @@ const verboseMode = false;
 let camera;
 let device;
 
-console.debug(`[TinyBoom CLI] packageVersion`, packageVersion);
-console.debug(`[TinyBoom CLI] platform`, process.platform);
-console.debug(`[TinyBoom CLI] projectCodeArgv`, projectCodeArgv);
-console.debug(`[TinyBoom CLI] apiKeyArgv`, apiKeyArgv);
-console.debug(`[TinyBoom CLI] widthArgv`, widthArgv);
-console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
+console.debug(`[Tinyboom CLI] packageVersion`, packageVersion);
+console.debug(`[Tinyboom CLI] platform`, process.platform);
+console.debug(`[Tinyboom CLI] projectCodeArgv`, projectCodeArgv);
+console.debug(`[Tinyboom CLI] apiKeyArgv`, apiKeyArgv);
+console.debug(`[Tinyboom CLI] widthArgv`, widthArgv);
+console.debug(`[Tinyboom CLI] heightArgv`, heightArgv);
 
 (async () => {
   if (!noCamera) {
@@ -112,9 +112,9 @@ console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
   process.on('SIGHUP', onSignal);
   process.on('SIGINT', onSignal);
   const deviceId = await linuxDevice.getDeviceId();
-  console.debug(`[TinyBoom CLI] deviceId`, deviceId);
+  console.debug(`[Tinyboom CLI] deviceId`, deviceId);
   const deviceType = await linuxDevice.getDeviceType();
-  console.debug(`[TinyBoom CLI] deviceType`, deviceType);
+  console.debug(`[Tinyboom CLI] deviceType`, deviceType);
 
   linuxDevice.on('snapshot', async (buffer, filename) => {
     if (linuxDevice.isSnapshotStreaming()) {
@@ -151,7 +151,7 @@ console.debug(`[TinyBoom CLI] heightArgv`, heightArgv);
     console.error('Error: Invalid Device');
     process.exit(1);
   }
-  console.debug(`[TinyBoom CLI] project`, project.name);
+  console.debug(`[Tinyboom CLI] project`, project.name);
   if (camera) {
     let cameraDevice;
     const cameraDevices = await camera.listDevices();

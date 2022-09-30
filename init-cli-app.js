@@ -113,7 +113,7 @@ async function setupCliApp(configFactory, config, opts, deviceId) {
             let dk = (await config.api.projects.listDevkeys(projectId)).body;
             if (!dk.apiKey) {
                 throw new Error('No API key set (via --api-key), and no development API keys configured for ' +
-                    'this project. Add a development API key from the TinyBoom dashboard to continue.');
+                    'this project. Add a development API key from the Tinyboom dashboard to continue.');
             }
             devKeys.apiKey = dk.apiKey;
             if (!opts.hmacKeyArgv && dk.hmacKey) {
